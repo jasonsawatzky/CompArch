@@ -33,7 +33,9 @@ unsigned int pc;
 int memOffset = 0;
 int instructionCount = 0;
 int exitTriggered = 0;
-int userMemoryBase = 300;
+/* int userMemoryBase = 300;
+ */
+int userMemoryBase = 0;
 int mockEntryPoint = 4;
 
 int main() {
@@ -608,7 +610,7 @@ void printRegisters() {
 
 void lw(instruction *instr) {
   int rt = getReg(instr->rt);
-  int oldRt = rt;
+  int oldRt = Reg[rt];
   int rs = getReg(instr->rt);
   int imm = getReg(instr->imm);
 
@@ -621,8 +623,8 @@ void jal(instruction *instr) {
   int oldRa = Reg[31];
   int oldPc = pc;
   /* Changed to +4 */
-  Reg[31] = pc + 4;
-  pc = index;
+  Reg[31] = pc;
+  pc = index * 4 - 4;;
   printf("Executed jal; ra: %d -> %d pc: %d -> %d\n", oldRa, Reg[31], oldPc, Reg[pc]);
 }
 
@@ -652,7 +654,7 @@ void beq(instruction *instr) {
   int oldPC = pc;
   if (Reg[rs] == Reg[rt]) {
     /* Changed to +4 */
-    pc += imm + 4;
+    pc += imm * 4;
   }
   printf("Executed beq; pc: %d -> %d \n", oldPC, pc);
 }
@@ -702,9 +704,10 @@ void bne(instruction *instr) {
   short imm = instr->imm;
   int oldPC = pc;
 
+  printf("BNE:Reg[rs]: %d Reg[rt]: %d \n", Reg[rs], Reg[rt]);
   if (Reg[rs] != Reg[rt]) {
     /* Changed to +4 */
-    pc += imm + 4;
+    pc += imm * 4;
   }
   printf("Executed bne; pc: %d -> %d \n", oldPC, pc);
 }
@@ -790,15 +793,22 @@ void xor(instruction *instr) {
 }
 
 void srl(instruction *instr) {
+  printf("NYI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 }
 
 void sra(instruction *instr) {
+  printf("NYI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 }
 
 void sllv(instruction *instr) {
+  printf("NYI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 }
 
 void srlv(instruction *instr) {
+  printf("NYI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 }
 
 void srav(instruction *instr) {
